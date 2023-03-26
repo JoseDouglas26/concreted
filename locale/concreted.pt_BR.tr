@@ -1,0 +1,24 @@
+# textdomain: concreted
+#Node types:
+@1 Concrete=Concreto @1
+@1 Slab=Laje de @1
+@1 Stair=Escada de @1
+@1 Wall=Parede de @1
+Inner @1=Interior de @1
+Outer @1=Exterior de @1
+#Color names:
+Black=Preto
+Blue=Azul
+Brown=Marrom
+Cyan=Ciano
+Dark Green=Verde Escuro
+Dark Grey=Cinza Escuro
+Green=Verde
+Grey=Cinza
+Magenta=Magenta
+Orange=Laranja
+Pink=Rosa
+Red=Vermelho
+Violet=Violeta
+White=Branco
+Yellow=Amarelo

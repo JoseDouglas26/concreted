@@ -1,0 +1,16 @@
+{
+    "type": "MOD",
+    "title": "Default Concrete",
+    "name": "concreted",
+    "dev_state": "ACTIVELY_DEVELOPED",
+    "tags": ["building", "decoration"],
+    "content_warnings": null,
+    "license": "MIT",
+    "media_license": {"is_foss":true,"name":"CC-BY-3.0"},
+    "repo": "https://github.com/JoseDouglas26/concreted",
+    "website": null,
+    "issue_tracker": null,
+    "forums": "https://forum.minetest.net/viewtopic.php?f=9&t=29295",
+    "video_url": null,
+    "donate_url": null
+}

@@ -1,0 +1,24 @@
+# textdomain: concreted
+#Node types:
+@1 Concrete=
+@1 Slab=
+@1 Stair=
+@1 Wall=
+Inner @1=
+Outer @1=
+#Color names:
+Black=
+Blue=
+Brown=
+Cyan=
+Dark Green=
+Dark Grey=
+Green=
+Grey=
+Magenta=
+Orange=
+Pink=
+Red=
+Violet=
+White=
+Yellow=
