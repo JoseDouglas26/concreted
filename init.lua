@@ -6,7 +6,7 @@ local S = minetest.get_translator("concreted")
 local dyes = dye.dyes
 
 local substrings = {}
-
+local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
 
 for i = 1, #dyes do
 	local name, desc = unpack(dyes[i])
@@ -21,7 +21,9 @@ for i = 1, #dyes do
 		sounds = default.node_sound_stone_defaults(),
 	})
 
-	minetest.register_craft{
+	-- For bucket water
+
+	minetest.register_craft({
 		type = "shaped",
 		output = "concreted:" .. name .. "_concrete 6",
         recipe = {
@@ -30,9 +32,24 @@ for i = 1, #dyes do
             {"default:gravel", "default:gravel", "default:gravel"}
         },
 		replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}}
-	}
+	})
 
-	minetest.register_craft{
+	if have_bucket_wooden then
+		minetest.register_craft({
+			type = "shaped",
+			output = "concreted:" .. name .. "_concrete 6",
+			recipe = {
+				{"group:sand", "group:sand", "group:sand"},
+				{"group:dye,color_" .. name, "bucket_wooden:bucket_water", "group:dye,color_" .. name},
+				{"default:gravel", "default:gravel", "default:gravel"}
+			},
+			replacements = {{"bucket_wooden:bucket_water", "bucket_wooden:bucket_empty"}}
+		})
+	end
+
+	-- For river water
+
+	minetest.register_craft({
 		type = "shaped",
 		output = "concreted:" .. name .. "_concrete 6",
         recipe = {
@@ -41,8 +58,21 @@ for i = 1, #dyes do
             {"default:gravel", "default:gravel", "default:gravel"}
         },
 		replacements = {{"bucket:bucket_river_water", "bucket:bucket_empty"}}
-	}
+	})
 
+	if have_bucket_wooden then
+		minetest.register_craft({
+			type = "shaped",
+			output = "concreted:" .. name .. "_concrete 6",
+			recipe = {
+				{"group:sand", "group:sand", "group:sand"},
+				{"group:dye,color_" .. name, "bucket_wooden:bucket_river_water", "group:dye,color_" .. name},
+				{"default:gravel", "default:gravel", "default:gravel"}
+			},
+			replacements = {{"bucket_wooden:bucket_river_water", "bucket_wooden:bucket_empty"}}
+		})
+	end
+	
 	-- Concrete slabs
 
 	stairs.register_slab(
