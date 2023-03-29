@@ -154,35 +154,61 @@ if minetest.get_modpath("i3") then
 		by = substrings
 	})
 
-	table.insert(substrings, "black_concrete")
-
-	i3.compress("stairs:stair_inner_wood", {
-		replace = "wood",
+	i3.compress("stairs:slab_black_concrete", {
+		replace = "black_concrete",
 		by = substrings
 	})
 
-	i3.compress("stairs:slab_wood", {
-		replace = "wood",
+	i3.compress("stairs:stair_black_concrete", {
+		replace = "black_concrete",
 		by = substrings
 	})
 
-	i3.compress("stairs:stair_wood", {
-		replace = "wood",
+	i3.compress("stairs:stair_inner_black_concrete", {
+		replace = "black_concrete",
 		by = substrings
 	})
 
-	i3.compress("stairs:stair_outer_wood", {
-		replace = "wood",
+	i3.compress("stairs:stair_outer_black_concrete", {
+		replace = "black_concrete",
 		by = substrings
 	})
 
-	for i = 1, #substrings do
-		substrings[i] = "concreted:" .. substrings[i] .. "_wall"
+	i3.compress("concreted:black_concrete_wall", {
+		replace = "black_concrete",
+		by = substrings
+	})
+
+	if minetest.get_modpath("columnia") then
+		i3.compress("columnia:column_bottom_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
+
+		i3.compress("columnia:column_crosslink_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
+
+		i3.compress("columnia:column_link_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
+
+		i3.compress("columnia:column_linkdown_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
+
+		i3.compress("columnia:column_mid_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
+
+		i3.compress("columnia:column_top_black_concrete", {
+			replace = "black_concrete",
+			by = substrings
+		})
 	end
-
-	i3.compress("walls:cobble", {
-		replace = "walls:cobble",
-		by = substrings
-	})
 end
 
