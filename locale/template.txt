@@ -6,6 +6,13 @@
 @1 Wall=
 Inner @1=
 Outer @1=
+#Columnia node types:
+@1 Column=
+@1 Top=
+@1 Bottom=
+@1 Crosslink=
+@1 Link=
+@1 Linkdown=
 #Color names:
 Black=
 Blue=

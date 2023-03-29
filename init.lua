@@ -72,7 +72,7 @@ for i = 1, #dyes do
 			replacements = {{"bucket_wooden:bucket_river_water", "bucket_wooden:bucket_empty"}}
 		})
 	end
-	
+
 	-- Concrete slabs
 
 	stairs.register_slab(
@@ -131,6 +131,21 @@ for i = 1, #dyes do
 	if name ~= "black" then
 		table.insert(substrings, name .. "_concrete")
 	end
+
+	if minetest.get_modpath("columnia") then
+		columnia.register_column_ia(name .. "_concrete",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. name .. ".png"},
+			S("@1 Column", S("@1 Concrete", S(desc))),
+			S("@1 Top", S("@1 Column", S("@1 Concrete", S(desc)))),
+			S("@1 Bottom", S("@1 Column", S("@1 Concrete", S(desc)))),
+			S("@1 Crosslink", S("@1 Column", S("@1 Concrete", S(desc)))),
+			S("@1 Link", S("@1 Column", S("@1 Concrete", S(desc)))),
+			S("@1 Linkdown", S("@1 Column", S("@1 Concrete", S(desc)))),
+			default.node_sound_stone_defaults()
+		)
+	end
 end
 
 if minetest.get_modpath("i3") then
@@ -170,3 +185,4 @@ if minetest.get_modpath("i3") then
 		by = substrings
 	})
 end
+

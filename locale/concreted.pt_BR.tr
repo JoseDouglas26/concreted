@@ -6,6 +6,13 @@
 @1 Wall=Parede de @1
 Inner @1=Interior de @1
 Outer @1=Exterior de @1
+#Columnia node types:
+@1 Column=Fuste de @1
+@1 Top=Capitel de @1
+@1 Bottom=Base de @1
+@1 Crosslink=Ligação Cruzada de @1
+@1 Link=Braço de @1
+@1 Linkdown=Braço de @1 com Ligação Abaixo
 #Color names:
 Black=Preto
 Blue=Azul
