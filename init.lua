@@ -211,4 +211,3 @@ if minetest.get_modpath("i3") then
 		})
 	end
 end
-
