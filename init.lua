@@ -5,8 +5,56 @@ local S = minetest.get_translator("concreted")
 
 local dyes = dye.dyes
 
-local substrings = {}
+local concrete_list = {}
 local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
+
+local stairsplus_subset = {
+	{ "micro", "" },
+	{ "micro", "_1" },
+	{ "micro", "_2" },
+	{ "micro", "_4" },
+	{ "micro", "_12" },
+	{ "micro", "_14" },
+	{ "micro", "_15" },
+	{ "panel", "" },
+	{ "panel", "_1" },
+	{ "panel", "_2" },
+	{ "panel", "_4" },
+	{ "panel", "_12" },
+	{ "panel", "_14" },
+	{ "panel", "_15" },
+	{ "slab",  "_quarter" },
+	{ "slab",  "_three_quarter" },
+	{ "slab",  "_1" },
+	{ "slab",  "_2" },
+	{ "slab",  "_14" },
+	{ "slab",  "_15" },
+	{ "slab",  "_two_sides" },
+	{ "slab",  "_three_sides" },
+	{ "slab",  "_three_sides_u" },
+	{ "slope", "" },
+	{ "slope", "_half" },
+	{ "slope", "_half_raised" },
+	{ "slope", "_inner" },
+	{ "slope", "_inner_half" },
+	{ "slope", "_inner_half_raised" },
+	{ "slope", "_inner_cut" },
+	{ "slope", "_inner_cut_half" },
+	{ "slope", "_inner_cut_half_raised" },
+	{ "slope", "_outer" },
+	{ "slope", "_outer_half" },
+	{ "slope", "_outer_half_raised" },
+	{ "slope", "_outer_cut" },
+	{ "slope", "_outer_cut_half" },
+	{ "slope", "_outer_cut_half_raised" },
+	{ "slope", "_cut" },
+	{ "stair", "_half" },
+	{ "stair", "_right_half" },
+	{ "stair", "_alt" },
+	{ "stair", "_alt_1" },
+	{ "stair", "_alt_2" },
+	{ "stair", "_alt_4" },
+}
 
 for i = 1, #dyes do
 	local name, desc = unpack(dyes[i])
@@ -128,11 +176,7 @@ for i = 1, #dyes do
 		default.node_sound_stone_defaults()
 	)
 
-	if name ~= "black" then
-		table.insert(substrings, name .. "_concrete")
-	end
-
-	if minetest.get_modpath("columnia") then
+	--[[if minetest.get_modpath("columnia") then
 		columnia.register_column_ia(name .. "_concrete",
 			"concreted:" .. name .. "_concrete",
 			{cracky = 2},
@@ -145,69 +189,106 @@ for i = 1, #dyes do
 			S("@1 Linkdown", S("@1 Column", S("@1 Concrete", S(desc)))),
 			default.node_sound_stone_defaults()
 		)
+	end]]--
+
+	if minetest.get_modpath("moreblocks") then
+		stairsplus:register_custom_subset(stairsplus_subset, "concreted", name .. "_concrete", "concreted:" .. name .. "_concrete", {
+			description = desc .. " Concrete",
+			tiles = {"concreted_" .. name .. ".png"},
+			groups = {cracky = 2},
+			sounds = default.node_sound_stone_defaults(),
+		})
+	end
+
+	if name ~= "black" then
+		table.insert(concrete_list, name .. "_concrete")
 	end
 end
 
 if minetest.get_modpath("i3") then
 	i3.compress("concreted:black_concrete", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
 
 	i3.compress("stairs:slab_black_concrete", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
 
 	i3.compress("stairs:stair_black_concrete", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
 
 	i3.compress("stairs:stair_inner_black_concrete", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
 
 	i3.compress("stairs:stair_outer_black_concrete", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
 
 	i3.compress("concreted:black_concrete_wall", {
 		replace = "black_concrete",
-		by = substrings
+		by = concrete_list
 	})
-
+	--[[
 	if minetest.get_modpath("columnia") then
 		i3.compress("columnia:column_bottom_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 
 		i3.compress("columnia:column_crosslink_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 
 		i3.compress("columnia:column_link_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 
 		i3.compress("columnia:column_linkdown_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 
 		i3.compress("columnia:column_mid_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 
 		i3.compress("columnia:column_top_black_concrete", {
 			replace = "black_concrete",
-			by = substrings
+			by = concrete_list
 		})
 	end
+	]]--
+end
+
+table.insert(concrete_list, "black_concrete")
+
+local nodes_table = {}
+
+for i = 1, #concrete_list do
+	local nodename = concrete_list[i]
+
+	nodes_table[nodename] = {}
+
+	for _, shape in ipairs(stairsplus_subset) do
+		if shape[1] ~= "slope" or shape[2] ~= "" then
+			table.insert(nodes_table[nodename], shape[1] .. "_" .. nodename .. shape[2])
+		end
+	end
+
+	local slope_name = "slope_" .. nodename
+
+	i3.compress("concreted:" .. slope_name, {
+		replace = slope_name,
+		by = nodes_table[nodename],
+	})
 end
