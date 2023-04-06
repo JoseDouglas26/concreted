@@ -287,8 +287,10 @@ for i = 1, #concrete_list do
 
 	local slope_name = "slope_" .. nodename
 
-	i3.compress("concreted:" .. slope_name, {
-		replace = slope_name,
-		by = nodes_table[nodename],
-	})
+	if minetest.get_modpath("i3") then
+		i3.compress("concreted:" .. slope_name, {
+			replace = slope_name,
+			by = nodes_table[nodename],
+		})
+	end
 end
