@@ -3,11 +3,12 @@
 -- Load support for MT game translation.
 local S = minetest.get_translator("concreted")
 
-local dyes = dye.dyes
+local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
+local have_i3 = minetest.get_modpath("i3")
+local have_moreblocks = minetest.get_modpath("moreblocks")
 
 local concrete_list = {}
-local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
-
+local dyes = dye.dyes
 local stairsplus_subset = {
 	{ "micro", "" },
 	{ "micro", "_1" },
@@ -65,7 +66,7 @@ for i = 1, #dyes do
 		description = S("@1 Concrete", S(desc)),
 		tiles = {"concreted_" .. name .. ".png"},
 		is_ground_content = false,
-		groups = {cracky = 2, concrete = 1},
+		groups = {cracky = 2},
 		sounds = default.node_sound_stone_defaults(),
 	})
 
@@ -126,7 +127,7 @@ for i = 1, #dyes do
 	stairs.register_slab(
 		name .. "_concrete",
 		"concreted:" .. name .. "_concrete",
-		{cracky = 3, concrete = 1},
+		{cracky = 3},
 		{"concreted_" .. name .. ".png"},
 		S("@1 Slab", S("@1 Concrete",  S(desc))),
 		default.node_sound_stone_defaults(),
@@ -138,7 +139,7 @@ for i = 1, #dyes do
 	stairs.register_stair(
 		name .. "_concrete",
 		"concreted:" .. name .. "_concrete",
-		{cracky = 3, concrete = 1},
+		{cracky = 3},
 		{"concreted_" .. name .. ".png"},
 		S("@1 Stair", S("@1 Concrete", S(desc))),
 		default.node_sound_stone_defaults(),
@@ -148,7 +149,7 @@ for i = 1, #dyes do
 	stairs.register_stair_inner(
 		name .. "_concrete",
 		"concreted:" .. name .. "_concrete",
-		{cracky = 3, concrete = 1},
+		{cracky = 3},
 		{"concreted_" .. name .. ".png"},
 		"",
 		default.node_sound_stone_defaults(),
@@ -159,7 +160,7 @@ for i = 1, #dyes do
 	stairs.register_stair_outer(
 		name .. "_concrete",
 		"concreted:" .. name .. "_concrete",
-		{cracky = 3, concrete = 1},
+		{cracky = 3},
 		{"concreted_" .. name .. ".png"},
 		"",
 		default.node_sound_stone_defaults(),
@@ -191,7 +192,7 @@ for i = 1, #dyes do
 		)
 	end]]--
 
-	if minetest.get_modpath("moreblocks") then
+	if have_moreblocks then
 		stairsplus:register_custom_subset(stairsplus_subset, "concreted", name .. "_concrete", "concreted:" .. name .. "_concrete", {
 			description = desc .. " Concrete",
 			tiles = {"concreted_" .. name .. ".png"},
@@ -205,7 +206,7 @@ for i = 1, #dyes do
 	end
 end
 
-if minetest.get_modpath("i3") then
+if have_i3 then
 	i3.compress("concreted:black_concrete", {
 		replace = "black_concrete",
 		by = concrete_list
@@ -287,7 +288,7 @@ for i = 1, #concrete_list do
 
 	local slope_name = "slope_" .. nodename
 
-	if minetest.get_modpath("i3") then
+	if have_i3 then
 		i3.compress("concreted:" .. slope_name, {
 			replace = slope_name,
 			by = nodes_table[nodename],
