@@ -192,6 +192,8 @@ for i = 1, #dyes do
 		)
 	end]]--
 
+	-- More Blocks
+
 	if have_moreblocks then
 		stairsplus:register_custom_subset(stairsplus_subset, "concreted", name .. "_concrete", "concreted:" .. name .. "_concrete", {
 			description = desc .. " Concrete",
@@ -205,6 +207,8 @@ for i = 1, #dyes do
 		table.insert(concrete_list, name .. "_concrete")
 	end
 end
+
+-- i3 Compression
 
 if have_i3 then
 	i3.compress("concreted:black_concrete", {
@@ -270,6 +274,8 @@ if have_i3 then
 	end
 	]]--
 end
+
+-- i3 Compression for More Blocks nodes
 
 table.insert(concrete_list, "black_concrete")
 
