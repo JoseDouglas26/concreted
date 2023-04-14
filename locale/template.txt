@@ -22,6 +22,9 @@ Yellow=
 @1 Wall=
 Inner @1=
 Outer @1=
+#Angled Stairs nodes:
+@1 Angled Slab=
+@1 Angled Stair=
 #Angled Walls nodes:
 @1 Angled Wall=
 @1 Low Angled Wall=

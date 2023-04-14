@@ -22,6 +22,9 @@ Yellow=Amarelo
 @1 Wall=Parede de @1
 Inner @1=Interior de @1
 Outer @1=Exterior de @1
+#Angled Stairs nodes:
+@1 Angled Slab=Laje Angulada de @1
+@1 Angled Stair=Escada Angulada de @1
 #Angled Walls nodes:
 @1 Angled Wall=Parede Angulada de @1
 @1 Low Angled Wall=Parede Angulada Baixa de @1

@@ -3,10 +3,12 @@
 -- Load support for MT game translation.
 local S = minetest.get_translator("concreted")
 
+local have_angledstairs = minetest.get_modpath("angledstairs")
 local have_angledwalls = minetest.get_modpath("angledwalls")
 local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
 local have_i3 = minetest.get_modpath("i3")
 local have_moreblocks = minetest.get_modpath("moreblocks")
+local have_pkarcs = minetest.get_modpath("pkarcs")
 
 local concrete_list = {}
 local dyes = dye.dyes
@@ -189,10 +191,6 @@ for i = 1, #dyes do
 		})
 	end
 
-	if name ~= "black" then
-		table.insert(concrete_list, name .. "_concrete")
-	end
-
 	-- Angled Walls
 
 	if have_angledwalls then
@@ -233,6 +231,35 @@ for i = 1, #dyes do
 			S("@1 Sloped Wall", S("@1 Concrete", S(desc))),
 			default.node_sound_stone_defaults()
 		)
+	end
+
+	-- Simple Arcs
+
+	if have_pkarcs then
+		pkarcs.register_all(
+			name .. "_concrete",
+			desc .. " Concrete",
+			{"concreted_" .. name .. ".png"},
+			default.node_sound_stone_defaults(),
+			{cracky = 2},
+			"concreted:" .. name .. "_concrete"
+		)
+	end
+
+	if have_angledstairs then
+		angledstairs.register_angled_stair_and_angled_slab(
+			"_" .. name .. "_concrete",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. name .. ".png"},
+			S("@1 Angled Stair", S("@1 Concrete", S(desc))),
+			S("@1 Angled Slab", S("@1 Concrete", S(desc))),
+			default.node_sound_stone_defaults()
+		)
+	end
+
+	if name ~= "black" then
+		table.insert(concrete_list, name .. "_concrete")
 	end
 end
 
@@ -296,6 +323,45 @@ if have_i3 then
 		})
 
 		i3.compress("slopedwalls:sloped_wall_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
+
+	if have_pkarcs then
+		i3.compress("pkarcs:black_concrete_arc", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("pkarcs:black_concrete_outer_arc", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("pkarcs:black_concrete_inner_arc", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
+
+	if have_angledstairs then
+		i3.compress("angledstairs:angled_stair_right_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("angledstairs:angled_stair_left_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("angledstairs:angled_slab_right_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("angledstairs:angled_slab_left_black_concrete", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
