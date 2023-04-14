@@ -3,6 +3,7 @@
 -- Load support for MT game translation.
 local S = minetest.get_translator("concreted")
 
+local have_angledwalls = minetest.get_modpath("angledwalls")
 local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
 local have_i3 = minetest.get_modpath("i3")
 local have_moreblocks = minetest.get_modpath("moreblocks")
@@ -177,21 +178,6 @@ for i = 1, #dyes do
 		default.node_sound_stone_defaults()
 	)
 
-	--[[if minetest.get_modpath("columnia") then
-		columnia.register_column_ia(name .. "_concrete",
-			"concreted:" .. name .. "_concrete",
-			{cracky = 2},
-			{"concreted_" .. name .. ".png"},
-			S("@1 Column", S("@1 Concrete", S(desc))),
-			S("@1 Top", S("@1 Column", S("@1 Concrete", S(desc)))),
-			S("@1 Bottom", S("@1 Column", S("@1 Concrete", S(desc)))),
-			S("@1 Crosslink", S("@1 Column", S("@1 Concrete", S(desc)))),
-			S("@1 Link", S("@1 Column", S("@1 Concrete", S(desc)))),
-			S("@1 Linkdown", S("@1 Column", S("@1 Concrete", S(desc)))),
-			default.node_sound_stone_defaults()
-		)
-	end]]--
-
 	-- More Blocks
 
 	if have_moreblocks then
@@ -205,6 +191,48 @@ for i = 1, #dyes do
 
 	if name ~= "black" then
 		table.insert(concrete_list, name .. "_concrete")
+	end
+
+	-- Angled Walls
+
+	if have_angledwalls then
+		angledglass.register_glass(
+			"_" .. name .. "_concrete_glass",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2, oddly_breakable_by_hand = 1},
+			{"default_glass.png", "concreted_" .. name .. ".png"},
+			S("@1 Glass", S("@1 Concrete", S(desc))),
+			default.node_sound_glass_defaults()
+		)
+
+		angledglass.register_glass(
+			"_" .. name .. "_concrete_obsidian_glass",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2, oddly_breakable_by_hand = 1},
+			{"default_obsidian_glass.png", "concreted_" .. name .. ".png"},
+			S("@1 Obsidian Glass", S("@1 Concrete", S(desc))),
+			default.node_sound_glass_defaults()
+		)
+
+		angledwalls.register_angled_wall_and_low_angled_wall_and_corner(
+			"_" .. name .. "_concrete",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. name .. ".png"},
+			S("@1 Angled Wall", S("@1 Concrete", S(desc))),
+			S("@1 Low Angled Wall", S("@1 Concrete", S(desc))),
+			S("@1 Corner", S("@1 Concrete", S(desc))),
+			default.node_sound_stone_defaults()
+		)
+
+		slopedwalls.register_sloped_wall(
+			"_" .. name .. "_concrete",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. name .. ".png"},
+			S("@1 Sloped Wall", S("@1 Concrete", S(desc))),
+			default.node_sound_stone_defaults()
+		)
 	end
 end
 
@@ -240,39 +268,38 @@ if have_i3 then
 		replace = "black_concrete",
 		by = concrete_list
 	})
-	--[[
-	if minetest.get_modpath("columnia") then
-		i3.compress("columnia:column_bottom_black_concrete", {
+
+	if have_angledwalls then
+		i3.compress("angledglass:glass_black_concrete_glass", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 
-		i3.compress("columnia:column_crosslink_black_concrete", {
+		i3.compress("angledglass:glass_black_concrete_obsidian_glass", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 
-		i3.compress("columnia:column_link_black_concrete", {
+		i3.compress("angledwalls:angled_wall_black_concrete", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 
-		i3.compress("columnia:column_linkdown_black_concrete", {
+		i3.compress("angledwalls:low_angled_wall_black_concrete", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 
-		i3.compress("columnia:column_mid_black_concrete", {
+		i3.compress("angledwalls:corner_black_concrete", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 
-		i3.compress("columnia:column_top_black_concrete", {
+		i3.compress("slopedwalls:sloped_wall_black_concrete", {
 			replace = "black_concrete",
 			by = concrete_list
 		})
 	end
-	]]--
 end
 
 -- i3 Compression for More Blocks nodes
