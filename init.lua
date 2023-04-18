@@ -3,12 +3,15 @@
 -- Load support for MT game translation.
 local S = minetest.get_translator("concreted")
 
-local have_angledstairs = minetest.get_modpath("angledstairs")
-local have_angledwalls = minetest.get_modpath("angledwalls")
+-- Checking for optional mods
+
+local have_angledstairs  = minetest.get_modpath("angledstairs")
+local have_angledwalls 	 = minetest.get_modpath("angledwalls")
 local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
-local have_i3 = minetest.get_modpath("i3")
-local have_moreblocks = minetest.get_modpath("moreblocks")
-local have_pkarcs = minetest.get_modpath("pkarcs")
+local have_i3 			 = minetest.get_modpath("i3")
+local have_moreblocks 	 = minetest.get_modpath("moreblocks")
+local have_pkarcs 		 = minetest.get_modpath("pkarcs")
+local have_stoneworks 	 = minetest.get_modpath("stoneworks")
 
 local concrete_list = {}
 local dyes = dye.dyes
@@ -125,7 +128,7 @@ for i = 1, #dyes do
 		})
 	end
 
-	-- Concrete slabs
+	-- Concrete Slabs
 
 	stairs.register_slab(
 		name .. "_concrete",
@@ -258,6 +261,20 @@ for i = 1, #dyes do
 		)
 	end
 
+	-- Stoneworks
+	/*
+	if have_stoneworks then
+		stoneworks.register_arches_and_thin_wall(
+			"_" .. name .. "_concrete",
+			"concreted:" .. name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. name .. ".png"},
+			S("@1 Arches", S("@1 Concrete", S(desc))),
+			S("@1 Thin Wall", S("@1 Concrete", S(desc))),
+			default.node_sound_stone_defaults()
+		)
+	end
+	*/
 	if name ~= "black" then
 		table.insert(concrete_list, name .. "_concrete")
 	end
@@ -366,6 +383,114 @@ if have_i3 then
 			by = concrete_list
 		})
 	end
+	/*
+	if have_stoneworks then
+		i3.compress("stoneworks:arches_low_wall_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_high_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_low_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_high_quad_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_low_quad_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_high_T_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_low_T_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_high_corner_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:arches_low_corner_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_low_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_corner_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_low_corner_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_T_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_low_T_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_low_T_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_quad_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_low_quad_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_low_quad_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_high_arch_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+
+		i3.compress("stoneworks:thin_wall_low_arch_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
+	*/
 end
 
 -- i3 Compression for More Blocks nodes
