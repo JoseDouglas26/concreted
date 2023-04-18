@@ -10,6 +10,7 @@ local have_angledwalls 	 = minetest.get_modpath("angledwalls")
 local have_bucket_wooden = minetest.get_modpath("bucket_wooden")
 local have_i3 			 = minetest.get_modpath("i3")
 local have_moreblocks 	 = minetest.get_modpath("moreblocks")
+local have_pillars		 = minetest.get_modpath("pillars")
 local have_pkarcs 		 = minetest.get_modpath("pkarcs")
 local have_stoneworks 	 = minetest.get_modpath("stoneworks")
 
@@ -275,6 +276,18 @@ for i = 1, #dyes do
 		)
 	end
 	]]--
+
+	if have_pillars then
+		pillars.register_pillar(name .. "_concrete", {
+			basenode = "concreted:" .. name .. "_concrete",
+			description = S("@1 Pillar", S("@1 Concrete", S(desc))),
+			groups = {cracky = 2},
+			sounds = default.node_sound_stone_defaults(),
+			sunlight_propagates = true,
+			textures = {"concreted_" .. name .. ".png"},
+		})
+	end
+
 	if name ~= "black" then
 		table.insert(concrete_list, name .. "_concrete")
 	end
@@ -491,6 +504,13 @@ if have_i3 then
 		})
 	end
 	]]--
+
+	if have_pillars then
+		i3.compress("pillars:black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
 end
 
 -- i3 Compression for More Blocks nodes

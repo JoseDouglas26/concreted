@@ -32,3 +32,5 @@ Outer @1=
 @1 Glass=
 @1 Obsidian Glass=
 @1 Sloped Wall=
+#Pillar node:
+@1 Pillar=
