@@ -30,6 +30,7 @@ Outer @1=
 @1 Low Angled Wall=
 @1 Corner=
 @1 Glass=
+#@1 @2 Glass=
 @1 Obsidian Glass=
 @1 Sloped Wall=
 #Pillar node:

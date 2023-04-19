@@ -12,6 +12,7 @@ local have_i3 			 = minetest.get_modpath("i3")
 local have_moreblocks 	 = minetest.get_modpath("moreblocks")
 local have_pillars		 = minetest.get_modpath("pillars")
 local have_pkarcs 		 = minetest.get_modpath("pkarcs")
+local have_stainedglass  = minetest.get_modpath("stainedglass")
 local have_stoneworks 	 = minetest.get_modpath("stoneworks")
 
 local concrete_list = {}
@@ -216,6 +217,21 @@ for i = 1, #dyes do
 			default.node_sound_glass_defaults()
 		)
 
+		if have_stainedglass then
+			for j = 1, #dyes do
+				local glass_color_name, glass_color_desc = unpack(dyes[j])
+
+				angledglass.register_glass(
+					"_" .. name .. "_concrete_with_" .. glass_color_name .. "_glass",
+					"concreted:" .. name .. "_concrete",
+					{cracky = 2, oddly_breakable_by_hand = 1},
+					{"stainedglass_" .. glass_color_name .. ".png", "stainedglass_detail_" .. glass_color_name .. ".png", "concreted_" .. name .. ".png"},
+					S("@1 @2 Glass", S("@1 Concrete", S(desc)), S(glass_color_desc)),
+					default.node_sound_glass_defaults()
+				)
+			end
+		end
+
 		angledwalls.register_angled_wall_and_low_angled_wall_and_corner(
 			"_" .. name .. "_concrete",
 			"concreted:" .. name .. "_concrete",
@@ -263,7 +279,7 @@ for i = 1, #dyes do
 	end
 
 	-- Stoneworks
-	--[[
+
 	if have_stoneworks then
 		stoneworks.register_arches_and_thin_wall(
 			"_" .. name .. "_concrete",
@@ -275,7 +291,8 @@ for i = 1, #dyes do
 			default.node_sound_stone_defaults()
 		)
 	end
-	]]--
+
+	-- Pillars
 
 	if have_pillars then
 		pillars.register_pillar(name .. "_concrete", {
@@ -396,7 +413,7 @@ if have_i3 then
 			by = concrete_list
 		})
 	end
-	--[[
+
 	if have_stoneworks then
 		i3.compress("stoneworks:arches_low_wall_black_concrete", {
 			replace = "black_concrete",
@@ -503,7 +520,6 @@ if have_i3 then
 			by = concrete_list
 		})
 	end
-	]]--
 
 	if have_pillars then
 		i3.compress("pillars:black_concrete", {
@@ -513,9 +529,27 @@ if have_i3 then
 	end
 end
 
--- i3 Compression for More Blocks nodes
+-- i3 Compression for Angled Walls combined with Stained Glass
 
 table.insert(concrete_list, "black_concrete")
+
+if have_angledwalls and have_i3 and have_stainedglass then
+	local glass_colors = {}
+	for i = 1, #dyes do
+		if dyes[i][1] ~= "black" then
+			table.insert(glass_colors, dyes[i][1] .. "_glass")
+		end
+	end
+
+	for i = 1, #concrete_list do
+		i3.compress("angledglass:glass_" .. concrete_list[i] .. "_with_black_glass", {
+			replace = "black_glass",
+			by = glass_colors
+		})
+	end
+end
+
+-- i3 Compression for More Blocks nodes
 
 local nodes_table = {}
 
