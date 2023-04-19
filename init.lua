@@ -21,7 +21,7 @@ local have_stainedglass  = minetest.get_modpath("stainedglass")
 local enable_extended_compatibilities = minetest.settings:get_bool("enable_extended_compatibilities")
 
 -- Local tables
-
+local angledglass_nodes_extended = {}
 local concrete_list = {}
 local dyes = dye.dyes
 local glass_list = {}
@@ -533,8 +533,9 @@ if have_i3 then
 			by = glass_list
 		})
 
-	table.insert(concrete_list, "black_concrete")
-	table.insert(glass_list, "black_glass")
+		table.insert(concrete_list, "black_concrete")
+		table.insert(glass_list, "black_glass")
+	end
 
 	-- More Blocks
 
@@ -604,5 +605,4 @@ if have_i3 then
 			})
 		end
 	end]]--
-	end
 end
