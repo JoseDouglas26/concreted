@@ -279,7 +279,7 @@ for i = 1, #dyes do
 	end
 
 	-- Stoneworks
-
+	--[[
 	if have_stoneworks then
 		stoneworks.register_arches_and_thin_wall(
 			"_" .. name .. "_concrete",
@@ -291,7 +291,8 @@ for i = 1, #dyes do
 			default.node_sound_stone_defaults()
 		)
 	end
-
+	]]--
+	
 	-- Pillars
 
 	if have_pillars then
@@ -413,7 +414,7 @@ if have_i3 then
 			by = concrete_list
 		})
 	end
-
+	--[[
 	if have_stoneworks then
 		i3.compress("stoneworks:arches_low_wall_black_concrete", {
 			replace = "black_concrete",
@@ -520,7 +521,7 @@ if have_i3 then
 			by = concrete_list
 		})
 	end
-
+	]]--
 	if have_pillars then
 		i3.compress("pillars:black_concrete", {
 			replace = "black_concrete",
