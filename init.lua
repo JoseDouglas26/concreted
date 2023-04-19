@@ -1,6 +1,7 @@
 -- concreted/init.lua
 
 -- Load support for MT game translation.
+
 local S = minetest.get_translator("concreted")
 
 -- Checking for optional mods
@@ -13,10 +14,19 @@ local have_moreblocks 	 = minetest.get_modpath("moreblocks")
 local have_pillars		 = minetest.get_modpath("pillars")
 local have_pkarcs 		 = minetest.get_modpath("pkarcs")
 local have_stainedglass  = minetest.get_modpath("stainedglass")
-local have_stoneworks 	 = minetest.get_modpath("stoneworks")
+--local have_stoneworks 	 = minetest.get_modpath("stoneworks")
+
+-- Checking mod settings
+
+local enable_extended_compatibilities = minetest.settings:get_bool("enable_extended_compatibilities")
+
+-- Local tables
 
 local concrete_list = {}
 local dyes = dye.dyes
+local glass_list = {}
+local moreblocks_nodes = {}
+local moreblocks_nodes_extended = {}
 local stairsplus_subset = {
 	{ "micro", "" },
 	{ "micro", "_1" },
@@ -64,192 +74,160 @@ local stairsplus_subset = {
 	{ "stair", "_alt_2" },
 	{ "stair", "_alt_4" },
 }
+--[[local stoneworks_nodes = {}
+local stoneworks_subset = {
+	"arches_high",
+	"arches_low",
+	"arches_high_corner",
+	"arches_high_quad",
+	"arches_high_T",
+	"arches_low_corner",
+	"arches_low_quad",
+	"arches_low_T",
+	"arches_low_wall",
+	"thin_wall_high",
+	"thin_wall_low",
+	"thin_wall_high_arch",
+	"thin_wall_high_corner",
+	"thin_wall_high_quad",
+	"thin_wall_high_low_quad",
+	"thin_wall_high_low_T",
+	"thin_wall_high_T",
+	"thin_wall_low_arch",
+	"thin_wall_low_corner",
+	"thin_wall_low_quad",
+	"thin_wall_low_T"
+}]]--
+local water_containers = {
+	{"bucket:bucket_empty", "bucket:bucket_water"},
+	{"bucket:bucket_empty", "bucket:bucket_river_water"}
+}
+
+if have_bucket_wooden then
+	table.insert(water_containers, {"bucket_wooden:bucket_empty", "bucket_wooden:bucket_water"})
+	table.insert(water_containers, {"bucket_wooden:bucket_empty", "bucket_wooden:bucket_river_water"})
+end
+
+-- Dye loop
 
 for i = 1, #dyes do
-	local name, desc = unpack(dyes[i])
+	local concrete_color_name, concrete_color_desc = unpack(dyes[i])
 
-	-- Concrete blocks
+	-- Registering nodes
 
-	minetest.register_node("concreted:" .. name .. "_concrete", {
-		description = S("@1 Concrete", S(desc)),
-		tiles = {"concreted_" .. name .. ".png"},
+	minetest.register_node("concreted:" .. concrete_color_name .. "_concrete", {
+		description = S("@1 Concrete", S(concrete_color_desc)),
 		is_ground_content = false,
 		groups = {cracky = 2},
 		sounds = default.node_sound_stone_defaults(),
+		tiles = {"concreted_" .. concrete_color_name .. ".png"},
 	})
 
-	-- For bucket water
+	-- Water containers loop
 
-	minetest.register_craft({
-		type = "shaped",
-		output = "concreted:" .. name .. "_concrete 6",
-        recipe = {
-            {"group:sand", "group:sand", "group:sand"},
-            {"group:dye,color_" .. name, "bucket:bucket_water", "group:dye,color_" .. name},
-            {"default:gravel", "default:gravel", "default:gravel"}
-        },
-		replacements = {{"bucket:bucket_water", "bucket:bucket_empty"}}
-	})
+	for j = 1, #water_containers do
+		local empty_container, water_container = unpack(water_containers[j])
 
-	if have_bucket_wooden then
+		-- Registering crafts
+
 		minetest.register_craft({
-			type = "shaped",
-			output = "concreted:" .. name .. "_concrete 6",
+			output = "concreted:" .. concrete_color_name .. "_concrete 6",
 			recipe = {
 				{"group:sand", "group:sand", "group:sand"},
-				{"group:dye,color_" .. name, "bucket_wooden:bucket_water", "group:dye,color_" .. name},
+				{"dye:" .. concrete_color_name, water_container, "dye:" .. concrete_color_name},
 				{"default:gravel", "default:gravel", "default:gravel"}
 			},
-			replacements = {{"bucket_wooden:bucket_water", "bucket_wooden:bucket_empty"}}
+			replacements = {{water_container, empty_container}},
+			type = "shaped",
 		})
 	end
 
-	-- For river water
+	-- Angled Stairs
 
-	minetest.register_craft({
-		type = "shaped",
-		output = "concreted:" .. name .. "_concrete 6",
-        recipe = {
-            {"group:sand", "group:sand", "group:sand"},
-            {"group:dye,color_" .. name, "bucket:bucket_river_water", "group:dye,color_" .. name},
-            {"default:gravel", "default:gravel", "default:gravel"}
-        },
-		replacements = {{"bucket:bucket_river_water", "bucket:bucket_empty"}}
-	})
-
-	if have_bucket_wooden then
-		minetest.register_craft({
-			type = "shaped",
-			output = "concreted:" .. name .. "_concrete 6",
-			recipe = {
-				{"group:sand", "group:sand", "group:sand"},
-				{"group:dye,color_" .. name, "bucket_wooden:bucket_river_water", "group:dye,color_" .. name},
-				{"default:gravel", "default:gravel", "default:gravel"}
-			},
-			replacements = {{"bucket_wooden:bucket_river_water", "bucket_wooden:bucket_empty"}}
-		})
-	end
-
-	-- Concrete Slabs
-
-	stairs.register_slab(
-		name .. "_concrete",
-		"concreted:" .. name .. "_concrete",
-		{cracky = 3},
-		{"concreted_" .. name .. ".png"},
-		S("@1 Slab", S("@1 Concrete",  S(desc))),
-		default.node_sound_stone_defaults(),
-		false
-	)
-
-	-- Concrete Stairs
-
-	stairs.register_stair(
-		name .. "_concrete",
-		"concreted:" .. name .. "_concrete",
-		{cracky = 3},
-		{"concreted_" .. name .. ".png"},
-		S("@1 Stair", S("@1 Concrete", S(desc))),
-		default.node_sound_stone_defaults(),
-		false
-	)
-
-	stairs.register_stair_inner(
-		name .. "_concrete",
-		"concreted:" .. name .. "_concrete",
-		{cracky = 3},
-		{"concreted_" .. name .. ".png"},
-		"",
-		default.node_sound_stone_defaults(),
-		false,
-		S("Inner @1", S("@1 Stair", S("@1 Concrete", S(desc))))
-	)
-
-	stairs.register_stair_outer(
-		name .. "_concrete",
-		"concreted:" .. name .. "_concrete",
-		{cracky = 3},
-		{"concreted_" .. name .. ".png"},
-		"",
-		default.node_sound_stone_defaults(),
-		false,
-		S("Outer @1", S("@1 Stair", S("@1 Concrete", S(desc))))
-	)
-
-	-- Concrete Walls
-
-	walls.register("concreted:" .. name .. "_concrete_wall",
-		S("@1 Wall", S("@1 Concrete", S(desc))),
-		"concreted_" .. name .. ".png",
-		"concreted:" .. name .. "_concrete",
-		default.node_sound_stone_defaults()
-	)
-
-	-- More Blocks
-
-	if have_moreblocks then
-		stairsplus:register_custom_subset(stairsplus_subset, "concreted", name .. "_concrete", "concreted:" .. name .. "_concrete", {
-			description = desc .. " Concrete",
-			tiles = {"concreted_" .. name .. ".png"},
-			groups = {cracky = 2},
-			sounds = default.node_sound_stone_defaults(),
-		})
+	if have_angledstairs then
+		angledstairs.register_angled_stair_and_angled_slab(
+			"_" .. concrete_color_name .. "_concrete",
+			"concreted:" .. concrete_color_name .. "_concrete",
+			{cracky = 2},
+			{"concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Angled Stair", S("@1 Concrete", S(concrete_color_desc))),
+			S("@1 Angled Slab", S("@1 Concrete", S(concrete_color_desc))),
+			default.node_sound_stone_defaults()
+		)
 	end
 
 	-- Angled Walls
 
 	if have_angledwalls then
 		angledglass.register_glass(
-			"_" .. name .. "_concrete_glass",
-			"concreted:" .. name .. "_concrete",
+			"_" .. concrete_color_name .. "_concrete_glass",
+			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2, oddly_breakable_by_hand = 1},
-			{"default_glass.png", "concreted_" .. name .. ".png"},
-			S("@1 Glass", S("@1 Concrete", S(desc))),
+			{"default_glass.png", "concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Glass", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_glass_defaults()
 		)
 
 		angledglass.register_glass(
-			"_" .. name .. "_concrete_obsidian_glass",
-			"concreted:" .. name .. "_concrete",
+			"_" .. concrete_color_name .. "_concrete_obsidian_glass",
+			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2, oddly_breakable_by_hand = 1},
-			{"default_obsidian_glass.png", "concreted_" .. name .. ".png"},
-			S("@1 Obsidian Glass", S("@1 Concrete", S(desc))),
+			{"default_obsidian_glass.png", "concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Obsidian Glass", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_glass_defaults()
 		)
 
-		if have_stainedglass then
-			for j = 1, #dyes do
-				local glass_color_name, glass_color_desc = unpack(dyes[j])
-
-				angledglass.register_glass(
-					"_" .. name .. "_concrete_with_" .. glass_color_name .. "_glass",
-					"concreted:" .. name .. "_concrete",
-					{cracky = 2, oddly_breakable_by_hand = 1},
-					{"stainedglass_" .. glass_color_name .. ".png", "stainedglass_detail_" .. glass_color_name .. ".png", "concreted_" .. name .. ".png"},
-					S("@1 @2 Glass", S("@1 Concrete", S(desc)), S(glass_color_desc)),
-					default.node_sound_glass_defaults()
-				)
-			end
-		end
-
 		angledwalls.register_angled_wall_and_low_angled_wall_and_corner(
-			"_" .. name .. "_concrete",
-			"concreted:" .. name .. "_concrete",
+			"_" .. concrete_color_name .. "_concrete",
+			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2},
-			{"concreted_" .. name .. ".png"},
-			S("@1 Angled Wall", S("@1 Concrete", S(desc))),
-			S("@1 Low Angled Wall", S("@1 Concrete", S(desc))),
-			S("@1 Corner", S("@1 Concrete", S(desc))),
+			{"concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Angled Wall", S("@1 Concrete", S(concrete_color_desc))),
+			S("@1 Low Angled Wall", S("@1 Concrete", S(concrete_color_desc))),
+			S("@1 Corner", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_stone_defaults()
 		)
 
 		slopedwalls.register_sloped_wall(
-			"_" .. name .. "_concrete",
-			"concreted:" .. name .. "_concrete",
+			"_" .. concrete_color_name .. "_concrete",
+			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2},
-			{"concreted_" .. name .. ".png"},
-			S("@1 Sloped Wall", S("@1 Concrete", S(desc))),
+			{"concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Sloped Wall", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_stone_defaults()
+		)
+	end
+
+	-- More Blocks
+
+	if have_moreblocks then
+		stairsplus:register_custom_subset(
+			stairsplus_subset,
+			"concreted",
+			concrete_color_name .. "_concrete",
+			"concreted:" .. concrete_color_name .. "_concrete",
+			{
+				description = S("@1 Concrete", S(concrete_color_desc)),
+				groups = {cracky = 2},
+				sounds = default.node_sound_stone_defaults(),
+				tiles = {"concreted_" .. concrete_color_name .. ".png"},
+			}
+		)
+	end
+
+	-- Pillars
+
+	if have_pillars then
+		pillars.register_pillar(
+			concrete_color_name .. "_concrete",
+			{
+				basenode = "concreted:" .. concrete_color_name .. "_concrete",
+				description = S("@1 Pillar", S("@1 Concrete", S(concrete_color_desc))),
+				groups = {cracky = 2},
+				sounds = default.node_sound_stone_defaults(),
+				sunlight_propagates = true,
+				textures = {"concreted_" .. concrete_color_name .. ".png"},
+			}
 		)
 	end
 
@@ -257,92 +235,165 @@ for i = 1, #dyes do
 
 	if have_pkarcs then
 		pkarcs.register_all(
-			name .. "_concrete",
-			desc .. " Concrete",
-			{"concreted_" .. name .. ".png"},
+			concrete_color_name .. "_concrete",
+			S("@1 Concrete", S(concrete_color_desc)),
+			{"concreted_" .. concrete_color_name .. ".png"},
 			default.node_sound_stone_defaults(),
 			{cracky = 2},
-			"concreted:" .. name .. "_concrete"
+			"concreted:" .. concrete_color_name .. "_concrete"
 		)
 	end
 
-	if have_angledstairs then
-		angledstairs.register_angled_stair_and_angled_slab(
-			"_" .. name .. "_concrete",
-			"concreted:" .. name .. "_concrete",
-			{cracky = 2},
-			{"concreted_" .. name .. ".png"},
-			S("@1 Angled Stair", S("@1 Concrete", S(desc))),
-			S("@1 Angled Slab", S("@1 Concrete", S(desc))),
-			default.node_sound_stone_defaults()
-		)
+	-- Stained Glass (Extension with Angled Walls for each concrete and glass colors)
+
+	if have_angledwalls and have_stainedglass and enable_extended_compatibilities then
+		for j = 1, #dyes do
+			local glass_color_name, glass_color_desc = unpack(dyes[j])
+
+			angledglass.register_glass(
+				"_" .. concrete_color_name .. "_concrete_with_" .. glass_color_name .. "_glass",
+				"concreted:" .. concrete_color_name .. "_concrete",
+				{cracky = 2, oddly_breakable_by_hand = 1},
+				{
+					"stainedglass_" .. glass_color_name .. ".png",
+					"stainedglass_detail_" .. glass_color_name .. ".png",
+					"concreted_" .. concrete_color_name .. ".png"
+				},
+				S("@1 With @2 Glass", S("@1 Concrete", S(concrete_color_desc)), S(glass_color_desc)),
+				default.node_sound_glass_defaults()
+			)
+		end
 	end
+
+	-- Stairs
+
+	stairs.register_stair_and_slab(
+		concrete_color_name .. "_concrete",
+		"concreted:" .. concrete_color_name .. "_concrete",
+		{cracky = 2},
+		{"concreted_" .. concrete_color_name .. ".png"},
+		S("@1 Stair", S("@1 Concrete", S(concrete_color_desc))),
+		S("@1 Slab", S("@1 Concrete",  S(concrete_color_desc))),
+		default.node_sound_stone_defaults(),
+		false,
+		S("Inner @1", S("@1 Stair", S("@1 Concrete", S(concrete_color_desc)))),
+		S("Outer @1", S("@1 Stair", S("@1 Concrete", S(concrete_color_desc))))
+	)
 
 	-- Stoneworks
-	--[[
-	if have_stoneworks then
+
+	--[[if have_stoneworks then
 		stoneworks.register_arches_and_thin_wall(
-			"_" .. name .. "_concrete",
-			"concreted:" .. name .. "_concrete",
+			"_" .. concrete_color_name .. "_concrete",
+			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2},
-			{"concreted_" .. name .. ".png"},
-			S("@1 Arches", S("@1 Concrete", S(desc))),
-			S("@1 Thin Wall", S("@1 Concrete", S(desc))),
+			{"concreted_" .. concrete_color_name .. ".png"},
+			S("@1 Arches", S("@1 Concrete", S(concrete_color_desc))),
+			S("@1 Thin Wall", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_stone_defaults()
 		)
-	end
-	]]--
-	
-	-- Pillars
+	end]]--
 
-	if have_pillars then
-		pillars.register_pillar(name .. "_concrete", {
-			basenode = "concreted:" .. name .. "_concrete",
-			description = S("@1 Pillar", S("@1 Concrete", S(desc))),
-			groups = {cracky = 2},
-			sounds = default.node_sound_stone_defaults(),
-			sunlight_propagates = true,
-			textures = {"concreted_" .. name .. ".png"},
-		})
-	end
+	-- Walls
 
-	if name ~= "black" then
-		table.insert(concrete_list, name .. "_concrete")
+	walls.register(
+		"concreted:" .. concrete_color_name .. "_concrete_wall",
+		S("@1 Wall", S("@1 Concrete", S(concrete_color_desc))),
+		"concreted_" .. concrete_color_name .. ".png",
+		"concreted:" .. concrete_color_name .. "_concrete",
+		default.node_sound_stone_defaults()
+	)
+
+	if concrete_color_name ~= "black" then
+		table.insert(concrete_list, concrete_color_name .. "_concrete")
 	end
 end
 
--- i3 Compression
+-- Extended compatibilities nodes (for each glass color)
+
+if enable_extended_compatibilities then
+
+	for i = 1, #dyes do
+		local glass_color_name, glass_color_desc = unpack(dyes[i])
+
+		if have_angledstairs then
+			angledstairs.register_angled_stair_and_angled_slab(
+				"_" .. glass_color_name .. "_glass",
+				"stainedglass:stained_glass_" .. glass_color_name,
+				{cracky = 2},
+				{"stainedglass_" .. glass_color_name .. ".png"},
+				S("@1 Glass Angled Stair", S(glass_color_desc)),
+				S("@1 Glass Angled Slab", S(glass_color_desc)),
+				default.node_sound_glass_defaults()
+			)
+		end
+
+		if have_angledwalls then
+			angledwalls.register_angled_wall_and_low_angled_wall_and_corner(
+				"_" .. glass_color_name .. "_glass",
+				"stainedglass:stained_glass_" .. glass_color_name,
+				{cracky = 2},
+				{"stainedglass_" .. glass_color_name .. ".png"},
+				S("@1 Glass Angled Wall", S(glass_color_desc)),
+				S("@1 Glass Low Angled Wall", S(glass_color_desc)),
+				S("@1 Glass Corner", S(glass_color_desc)),
+				default.node_sound_glass_defaults()
+			)
+		end
+
+		if have_moreblocks then
+			stairsplus:register_custom_subset(
+				stairsplus_subset,
+				"stainedglass",
+				glass_color_name .. "_glass",
+				"stainedglass:stained_glass" .. glass_color_name,
+				{
+					description = S("@1 Glass", S(glass_color_desc)),
+					groups = {cracky = 2,oddly_breakable_by_hand = 1},
+					sounds = default.node_sound_glass_defaults(),
+					tiles = {
+						"stainedglass_" .. glass_color_name .. ".png",
+						"stainedglass_detail_" ..  glass_color_name .. ".png"
+					},
+				}
+			)
+		end
+
+		if glass_color_name ~= "black" then
+			table.insert(glass_list, glass_color_name .. "_glass")
+		end
+	end
+end
+
+-- i3 compression
 
 if have_i3 then
-	i3.compress("concreted:black_concrete", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
 
-	i3.compress("stairs:slab_black_concrete", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
+	-- Angled Stairs
 
-	i3.compress("stairs:stair_black_concrete", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
+	if have_angledstairs then
+		i3.compress("angledstairs:angled_stair_right_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
 
-	i3.compress("stairs:stair_inner_black_concrete", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
+		i3.compress("angledstairs:angled_stair_left_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
 
-	i3.compress("stairs:stair_outer_black_concrete", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
+		i3.compress("angledstairs:angled_slab_right_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
 
-	i3.compress("concreted:black_concrete_wall", {
-		replace = "black_concrete",
-		by = concrete_list
-	})
+		i3.compress("angledstairs:angled_slab_left_black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
+
+	-- Angled Walls
 
 	if have_angledwalls then
 		i3.compress("angledglass:glass_black_concrete_glass", {
@@ -376,6 +427,24 @@ if have_i3 then
 		})
 	end
 
+	-- Concretes
+
+	i3.compress("concreted:black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
+
+	-- Pillars
+
+	if have_pillars then
+		i3.compress("pillars:black_concrete", {
+			replace = "black_concrete",
+			by = concrete_list
+		})
+	end
+
+	-- Simple Arcs
+
 	if have_pkarcs then
 		i3.compress("pkarcs:black_concrete_arc", {
 			replace = "black_concrete",
@@ -393,184 +462,147 @@ if have_i3 then
 		})
 	end
 
-	if have_angledstairs then
-		i3.compress("angledstairs:angled_stair_right_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	-- Slabs
 
-		i3.compress("angledstairs:angled_stair_left_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	i3.compress("stairs:slab_black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
 
-		i3.compress("angledstairs:angled_slab_right_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	-- Stairs
 
-		i3.compress("angledstairs:angled_slab_left_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-	end
-	--[[
-	if have_stoneworks then
-		i3.compress("stoneworks:arches_low_wall_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	i3.compress("stairs:stair_black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
 
-		i3.compress("stoneworks:arches_high_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	-- Stairs (Inner)
 
-		i3.compress("stoneworks:arches_low_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	i3.compress("stairs:stair_inner_black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
 
-		i3.compress("stoneworks:arches_high_quad_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	-- Stairs (Outer)
 
-		i3.compress("stoneworks:arches_low_quad_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	i3.compress("stairs:stair_outer_black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
 
-		i3.compress("stoneworks:arches_high_T_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	-- Walls
 
-		i3.compress("stoneworks:arches_low_T_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
+	i3.compress("concreted:black_concrete_wall", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
 
-		i3.compress("stoneworks:arches_high_corner_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:arches_low_corner_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_low_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_corner_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_low_corner_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_T_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_low_T_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_low_T_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_quad_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_low_quad_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_low_quad_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_high_arch_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-
-		i3.compress("stoneworks:thin_wall_low_arch_black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-	end
-	]]--
-	if have_pillars then
-		i3.compress("pillars:black_concrete", {
-			replace = "black_concrete",
-			by = concrete_list
-		})
-	end
-end
-
--- i3 Compression for Angled Walls combined with Stained Glass
-
-table.insert(concrete_list, "black_concrete")
-
-if have_angledwalls and have_i3 and have_stainedglass then
-	local glass_colors = {}
-	for i = 1, #dyes do
-		if dyes[i][1] ~= "black" then
-			table.insert(glass_colors, dyes[i][1] .. "_glass")
-		end
-	end
-
-	for i = 1, #concrete_list do
-		i3.compress("angledglass:glass_" .. concrete_list[i] .. "_with_black_glass", {
+	if have_angledwalls and have_stainedglass and enable_extended_compatibilities then
+		i3.compress("angledstairs:angled_slab_left_black_glass", {
 			replace = "black_glass",
-			by = glass_colors
+			by = glass_list
 		})
-	end
-end
 
--- i3 Compression for More Blocks nodes
+		i3.compress("angledstairs:angled_slab_right_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
 
-local nodes_table = {}
+		i3.compress("angledstairs:angled_stair_left_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
 
-for i = 1, #concrete_list do
-	local nodename = concrete_list[i]
+		i3.compress("angledstairs:angled_stair_right_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
 
-	nodes_table[nodename] = {}
+		i3.compress("angledwalls:angled_wall_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
 
-	for _, shape in ipairs(stairsplus_subset) do
-		if shape[1] ~= "slope" or shape[2] ~= "" then
-			table.insert(nodes_table[nodename], shape[1] .. "_" .. nodename .. shape[2])
+		i3.compress("angledwalls:corner_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
+
+		i3.compress("angledwalls:low_angled_wall_black_glass", {
+			replace = "black_glass",
+			by = glass_list
+		})
+
+	table.insert(concrete_list, "black_concrete")
+	table.insert(glass_list, "black_glass")
+
+	-- More Blocks
+
+	if have_moreblocks then
+		for i = 1, #concrete_list do
+			local concrete = concrete_list[i]
+
+			moreblocks_nodes[concrete] = {}
+
+			for _, shape in ipairs(stairsplus_subset) do
+				if shape[1] ~= "slope" or shape[2] ~= "" then
+					table.insert(moreblocks_nodes[concrete], shape[1] .. "_" .. concrete .. shape[2])
+				end
+			end
+
+			local slope_name = "slope_" .. concrete
+
+			i3.compress("concreted:" .. slope_name, {
+				replace = slope_name,
+				by = moreblocks_nodes[concrete],
+			})
+		end
+
+		for i = 1, #glass_list do
+			local glass = glass_list[i]
+
+			moreblocks_nodes_extended[glass] = {}
+
+			for _, shape in ipairs(stairsplus_subset) do
+				if shape[1] ~= "slope" or shape[2] ~= "" then
+					table.insert(
+						moreblocks_nodes_extended[glass],
+						shape[1] .. "_" .. glass .. shape[2]
+					)
+				end
+			end
+
+			local slope_name = "slope_" .. glass
+
+			i3.compress("stainedglass:" .. slope_name, {
+				replace = slope_name,
+				by = moreblocks_nodes_extended[glass]
+			})
 		end
 	end
 
-	local slope_name = "slope_" .. nodename
 
-	if have_i3 then
-		i3.compress("concreted:" .. slope_name, {
-			replace = slope_name,
-			by = nodes_table[nodename],
-		})
+	-- Stoneworks
+
+	--[[if have_stoneworks then
+		for i = 1, #concrete_list do
+			local concrete = concrete_list[i]
+
+			stoneworks_nodes[concrete] = {}
+
+			for j = 1, #stoneworks_subset do
+				if stoneworks_subset[j] ~= "arches_high" then
+					table.insert(stoneworks_nodes[concrete], stoneworks_subset[j] .. "_" .. concrete)
+				end
+			end
+
+			local arches_high_name = "arches_high_" .. concrete
+
+			i3.compress("stoneworks:" .. arches_high_name, {
+				replace = arches_high_name,
+				by = stoneworks_nodes[concrete]
+			})
+		end
+	end]]--
 	end
 end

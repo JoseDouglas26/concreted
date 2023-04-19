@@ -1,5 +1,5 @@
 # textdomain: concreted
-#Color names:
+#Colors:
 Black=
 Blue=
 Brown=
@@ -15,23 +15,35 @@ Red=
 Violet=
 White=
 Yellow=
-#Node types:
+
+#Minetest variants:
 @1 Concrete=
 @1 Slab=
 @1 Stair=
 @1 Wall=
 Inner @1=
 Outer @1=
-#Angled Stairs nodes:
+
+#Angled Stairs variants:
 @1 Angled Slab=
 @1 Angled Stair=
-#Angled Walls nodes:
+
+#Angled Walls variants:
 @1 Angled Wall=
-@1 Low Angled Wall=
 @1 Corner=
 @1 Glass=
-#@1 @2 Glass=
+@1 Low Angled Wall=
 @1 Obsidian Glass=
 @1 Sloped Wall=
-#Pillar node:
+
+#Pillar variant:
 @1 Pillar=
+
+#Extended compatibilities variants
+@1 Glass Angled Slab=
+@1 Glass Angled Stair=
+@1 Glass Angled Wall=
+@1 Glass Corner=
+@1 Glass Low Angled Wall=
+@1 With @2 Glass=
+
