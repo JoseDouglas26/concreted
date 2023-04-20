@@ -164,7 +164,7 @@ for i = 1, #dyes do
 			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2, oddly_breakable_by_hand = 1},
 			{"default_glass.png", "concreted_" .. concrete_color_name .. ".png"},
-			S("@1 Glass", S("@1 Concrete", S(concrete_color_desc))),
+			S("@1 With Glass", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_glass_defaults()
 		)
 
@@ -321,7 +321,10 @@ if enable_extended_compatibilities then
 				"_" .. glass_color_name .. "_glass",
 				"stainedglass:stained_glass_" .. glass_color_name,
 				{cracky = 2},
-				{"stainedglass_" .. glass_color_name .. ".png"},
+				{
+					"stainedglass_" .. glass_color_name .. ".png",
+					"stainedglass_detail_" .. glass_color_name .. ".png"
+				},
 				S("@1 Glass Angled Stair", S(glass_color_desc)),
 				S("@1 Glass Angled Slab", S(glass_color_desc)),
 				default.node_sound_glass_defaults()
@@ -333,7 +336,10 @@ if enable_extended_compatibilities then
 				"_" .. glass_color_name .. "_glass",
 				"stainedglass:stained_glass_" .. glass_color_name,
 				{cracky = 2},
-				{"stainedglass_" .. glass_color_name .. ".png"},
+				{
+					"stainedglass_" .. glass_color_name .. ".png",
+					"stainedglass_detail_" .. glass_color_name .. ".png"
+				},
 				S("@1 Glass Angled Wall", S(glass_color_desc)),
 				S("@1 Glass Low Angled Wall", S(glass_color_desc)),
 				S("@1 Glass Corner", S(glass_color_desc)),

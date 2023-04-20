@@ -31,10 +31,11 @@ Outer @1=Exterior de @1
 #Angled Walls variants:
 @1 Angled Wall=Parede Angulada de @1
 @1 Corner=Curva de @1
-@1 Glass=Vidro com @1
+@1 Glass=Vidro @1
 @1 Low Angled Wall=Parede Baixa Angulada de @1
 @1 Obsidian Glass=Vidro de Obsidiana com @1
 @1 Sloped Wall=Parede em Rampa de @1
+@1 With Glass=@1 com Vidro
 
 #Pillar variant:
 @1 Pillar=Pilar de @1

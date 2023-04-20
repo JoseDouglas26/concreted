@@ -1,0 +1,93 @@
+# Minetest Game mod: concreted <h1>
+
+The Default Concrete mod adds colored concrete blocks to the game.
+By default, the concrete colors available are the colors of the Dye mod.
+Each concrete color has stair, slab, and wall variants.
+The main idea behind this mod is to add colored blocks that match the colors of the Wool mod.
+The texture of the blocks is still very simple, but I intend to change that.
+
+
+## Concrete craft recipe <h2>
+### Bucket <h3>
+~~~lua
+    {
+        {"group:sand", "group:sand", "group:sand"},
+        {"group:dye", "bucket:bucket_water", "group:dye"},
+        {"default:gravel", "default:gravel", "default:gravel"}
+
+        {"group:sand", "group:sand", "group:sand"},
+        {"group:dye", "bucket:bucket_river_water", "group:dye"},
+        {"default:gravel", "default:gravel", "default:gravel"}
+    }
+~~~
+
+
+### Wooden Bucket <h3>
+~~~lua
+    {
+        {"group:sand", "group:sand", "group:sand"},
+        {"group:dye", "bucket_wooden:bucket_water", "group:dye"},
+        {"default:gravel", "default:gravel", "default:gravel"}
+
+        {"group:sand", "group:sand", "group:sand"},
+        {"group:dye", "bucket_wooden:bucket_river_water", "group:dye"},
+        {"default:gravel", "default:gravel", "default:gravel"}
+    }
+~~~
+
+
+## Dependencies
+* Bucket
+* Default
+* Dye
+* Stairs
+* Walls
+
+
+## Optional dependencies <h2>
+* Angled Stairs     [angledstairs](https://content.minetest.net/packages/TumeniNodes/angledstairs/)
+* Angled Walls      [angledwalls](https://content.minetest.net/packages/TumeniNodes/angledwalls/)
+* i3                [i3](https://content.minetest.net/packages/jp/i3/)
+* More Blocks       [moreblocks](https://content.minetest.net/packages/Calinou/moreblocks/)
+* Pillars           [pillars](https://content.minetest.net/packages/citorva/pillars/)
+* pkarcs            [pkarcs](https://content.minetest.net/packages/TumeniNodes/pkarcs/)
+* Stained Glass     [stainedglass](https://content.minetest.net/packages/alerikaisattera/stainedglass/)
+* Stoneworks        (still not working for now)\*
+* Wooden Bucket     [bucket_wooden](https://content.minetest.net/packages/Hume2/bucket_wooden/)
+
+
+## Compatibility extension <h2>
+* Angled Stairs + Stained Glass
+* Angled Walls + Stained Glass
+
+-------------------------------------------------------------------------------
+**NOTE**:
+>\*Still not working due to a very small bug in the mod's source code
+
+-------------------------------------------------------------------------------
+
+## License <h2>
+See **license.txt** for license information
+
+### Authors of source code <h3>
+>Originally by Perttu Ahola (celeron55) <celeron55@gmail.com> (MIT)
+>
+>Various Minetest developers and contributors (MIT)
+>
+>José Douglas (dougsouza26) (MIT)
+
+
+### Authors of media (textures) <h3>
+>José Douglas (CC BY-SA 3.0):
+
+    concreted_black.png,  concreted_blue.png,       concreted_brown.png,
+    concreted_cyan.png,   concreted_dark_green.png, concreted_dark_grey.png,
+    concreted_green.png,  concreted_grey.png,       concreted_magenta.png,
+    concreted_orange.png, concreted_pink.png,       concreted_red.png
+    concreted_violet.png, concreted_white.png,      concreted_yellow.png
+
+
+The texture pack uses colors obtained from the wool texture pack.
+
+>Credits for wool texture pack: Cisoun  (CC BY-SA 3.0)
+

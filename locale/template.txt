@@ -35,6 +35,7 @@ Outer @1=
 @1 Low Angled Wall=
 @1 Obsidian Glass=
 @1 Sloped Wall=
+@1 With Glass=
 
 #Pillar variant:
 @1 Pillar=
