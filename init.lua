@@ -14,7 +14,7 @@ local have_moreblocks 	 = minetest.get_modpath("moreblocks")
 local have_pillars		 = minetest.get_modpath("pillars")
 local have_pkarcs 		 = minetest.get_modpath("pkarcs")
 local have_stainedglass  = minetest.get_modpath("stainedglass")
---local have_stoneworks 	 = minetest.get_modpath("stoneworks")
+local have_stoneworks 	 = minetest.get_modpath("stoneworks")
 
 -- Checking mod settings
 
@@ -74,7 +74,7 @@ local stairsplus_subset = {
 	{ "stair", "_alt_2" },
 	{ "stair", "_alt_4" },
 }
---[[local stoneworks_nodes = {}
+local stoneworks_nodes = {}
 local stoneworks_subset = {
 	"arches_high",
 	"arches_low",
@@ -85,7 +85,7 @@ local stoneworks_subset = {
 	"arches_low_quad",
 	"arches_low_T",
 	"arches_low_wall",
-	"thin_wall_high",
+	--[["thin_wall_high",
 	"thin_wall_low",
 	"thin_wall_high_arch",
 	"thin_wall_high_corner",
@@ -96,8 +96,8 @@ local stoneworks_subset = {
 	"thin_wall_low_arch",
 	"thin_wall_low_corner",
 	"thin_wall_low_quad",
-	"thin_wall_low_T"
-}]]--
+	"thin_wall_low_T"]]--
+}
 local water_containers = {
 	{"bucket:bucket_empty", "bucket:bucket_water"},
 	{"bucket:bucket_empty", "bucket:bucket_river_water"}
@@ -198,6 +198,24 @@ for i = 1, #dyes do
 		)
 	end
 
+	-- Mese Posts
+	default.register_mesepost(
+		"concreted:mese_post_light_" .. concrete_color_name .. "_concrete",
+		{
+			description = S("@1 Mese Post Light", S("@1 Concrete", S(concrete_color_desc))),
+			material = "concreted:" .. concrete_color_name .. "_concrete",
+			texture = "concreted_" .. concrete_color_name .. ".png"
+		}
+	)
+
+	minetest.override_item(
+		"concreted:mese_post_light_" .. concrete_color_name .. "_concrete",
+		{
+			groups = {cracky = 3, oddly_breakable_by_hand = 2},
+			sounds = default.node_sound_stone_defaults()
+		}
+	)
+
 	-- More Blocks
 
 	if have_moreblocks then
@@ -282,17 +300,16 @@ for i = 1, #dyes do
 
 	-- Stoneworks
 
-	--[[if have_stoneworks then
-		stoneworks.register_arches_and_thin_wall(
+	if have_stoneworks then
+		stoneworks.register_arches(
 			"_" .. concrete_color_name .. "_concrete",
 			"concreted:" .. concrete_color_name .. "_concrete",
 			{cracky = 2},
 			{"concreted_" .. concrete_color_name .. ".png"},
 			S("@1 Arches", S("@1 Concrete", S(concrete_color_desc))),
-			S("@1 Thin Wall", S("@1 Concrete", S(concrete_color_desc))),
 			default.node_sound_stone_defaults()
 		)
-	end]]--
+	end
 
 	-- Walls
 
@@ -311,7 +328,7 @@ end
 
 -- Extended compatibilities nodes (for each glass color)
 
-if enable_extended_compatibilities then
+if have_stainedglass and enable_extended_compatibilities then
 
 	for i = 1, #dyes do
 		local glass_color_name, glass_color_desc = unpack(dyes[i])
@@ -440,6 +457,13 @@ if have_i3 then
 		by = concrete_list
 	})
 
+	-- Mese Posts
+
+	i3.compress("concreted:mese_post_light_black_concrete", {
+		replace = "black_concrete",
+		by = concrete_list
+	})
+
 	-- Pillars
 
 	if have_pillars then
@@ -538,10 +562,10 @@ if have_i3 then
 			replace = "black_glass",
 			by = glass_list
 		})
-
-		table.insert(concrete_list, "black_concrete")
-		table.insert(glass_list, "black_glass")
 	end
+
+	table.insert(concrete_list, "black_concrete")
+	table.insert(glass_list, "black_glass")
 
 	-- More Blocks
 
@@ -588,10 +612,9 @@ if have_i3 then
 		end
 	end
 
-
 	-- Stoneworks
 
-	--[[if have_stoneworks then
+	if have_stoneworks then
 		for i = 1, #concrete_list do
 			local concrete = concrete_list[i]
 
@@ -610,5 +633,5 @@ if have_i3 then
 				by = stoneworks_nodes[concrete]
 			})
 		end
-	end]]--
+	end
 end

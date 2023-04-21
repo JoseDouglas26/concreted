@@ -18,6 +18,7 @@ Yellow=Amarelo
 
 #Minetest variants:
 @1 Concrete=Concreto @1
+@1 Mese Post Light=Poste de Lâmpada de Mese de @1
 @1 Slab=Laje de @1
 @1 Stair=Escada de @1
 @1 Wall=Parede de @1

@@ -18,6 +18,7 @@ Yellow=
 
 #Minetest variants:
 @1 Concrete=
+@1 Mese Post Light=
 @1 Slab=
 @1 Stair=
 @1 Wall=

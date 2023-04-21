@@ -45,15 +45,15 @@ The texture of the blocks is still very simple, but I intend to change that.
 
 
 ## Optional dependencies <h2>
-* Angled Stairs     [angledstairs](https://content.minetest.net/packages/TumeniNodes/angledstairs/)
-* Angled Walls      [angledwalls](https://content.minetest.net/packages/TumeniNodes/angledwalls/)
-* i3                [i3](https://content.minetest.net/packages/jp/i3/)
-* More Blocks       [moreblocks](https://content.minetest.net/packages/Calinou/moreblocks/)
-* Pillars           [pillars](https://content.minetest.net/packages/citorva/pillars/)
-* pkarcs            [pkarcs](https://content.minetest.net/packages/TumeniNodes/pkarcs/)
-* Stained Glass     [stainedglass](https://content.minetest.net/packages/alerikaisattera/stainedglass/)
-* Stoneworks        (still not working for now)\*
-* Wooden Bucket     [bucket_wooden](https://content.minetest.net/packages/Hume2/bucket_wooden/)
+* [Angled Stairs](https://content.minetest.net/packages/TumeniNodes/angledstairs/)
+* [Angled Walls](https://content.minetest.net/packages/TumeniNodes/angledwalls/)
+* [i3](https://content.minetest.net/packages/jp/i3/)
+* [More Blocks](https://content.minetest.net/packages/Calinou/moreblocks/)
+* [Pillars](https://content.minetest.net/packages/citorva/pillars/)
+* [pkarcs](https://content.minetest.net/packages/TumeniNodes/pkarcs/)
+* [Stained Glass](https://content.minetest.net/packages/alerikaisattera/stainedglass/)
+* [Stoneworks](https://content.minetest.net/packages/TumeniNodes/stoneworks/)\*
+* [Wooden Bucket](https://content.minetest.net/packages/Hume2/bucket_wooden/)
 
 
 ## Compatibility extension <h2>
@@ -61,8 +61,7 @@ The texture of the blocks is still very simple, but I intend to change that.
 * Angled Walls + Stained Glass
 
 -------------------------------------------------------------------------------
-**NOTE**:
->\*Still not working due to a very small bug in the mod's source code
+>(\*) **NOTE**: Partially working, due to problems with the function ```stoneworsk.register_thin_wall()```
 
 -------------------------------------------------------------------------------
 
