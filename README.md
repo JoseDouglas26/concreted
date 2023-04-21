@@ -61,7 +61,7 @@ The texture of the blocks is still very simple, but I intend to change that.
 * Angled Walls + Stained Glass
 
 -------------------------------------------------------------------------------
->(\*) **NOTE**: Partially working, due to problems with the function ```stoneworsk.register_thin_wall()```
+>(\*) **NOTE**: Partially working, due to problems with the function ```stoneworks.register_thin_wall()```
 
 -------------------------------------------------------------------------------
 
