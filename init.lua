@@ -9,7 +9,7 @@ dofile(path .. "/compatibles.lua")
 dofile(path .. "/concrete.lua")
 dofile(path .. "/definitions.lua")
 
-if enable_bucket_wooden then
+if concreted.enable_bucket_wooden then
 	table.insert(
 		concreted.water_containers,
 		{"bucket_wooden:bucket_empty", "bucket_wooden:bucket_water"}

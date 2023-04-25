@@ -41,11 +41,10 @@ Outer @1=
 #Pillar variant:
 @1 Pillar=
 
-#Extended compatibilities variants
+#Extensions variants
 @1 Glass Angled Slab=
 @1 Glass Angled Stair=
 @1 Glass Angled Wall=
 @1 Glass Corner=
 @1 Glass Low Angled Wall=
 @1 With @2 Glass=
-
