@@ -59,12 +59,31 @@ The texture of the blocks is still very simple, but I intend to change that.
 ## Compatibility extension <h2>
 * Angled Stairs + Stained Glass
 * Angled Walls + Stained Glass
+* More Blocks + Stained Glass
+* i3 compression for all new additions
 
 -------------------------------------------------------------------------------
 >(\*) **NOTE**: Partially working, due to problems with the function ```stoneworks.register_thin_wall()```
 
 -------------------------------------------------------------------------------
+## Mod settings <h2>
 
+All of these settings are enabled by default. You can disable them in the settings tab of the main menu.
+
+```enable_angledstairs``` <br>
+```enable_angledwalls``` <br>
+```enable_bucket_wooden``` <br>
+```enable_compression``` <br>
+```enable_extensions``` <br>
+```enable_moreblocks``` <br>
+```enable_meseposts``` <br>
+```enable_pillars``` <br>
+```enable_pkarcs``` <br>
+```enable_stairs``` <br>
+```enable_stoneworks``` <br>
+```enable_walls``` <br>
+
+-------------------------------------------------------------------------------
 ## License <h2>
 See **license.txt** for license information
 
