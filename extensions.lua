@@ -63,7 +63,7 @@ for i = 1, #concreted.colors do
 		    {"stainedglass_" .. color_name .. ".png"},
 		    S("@1 Stair", S("@1 Glass", S(color_desc))),
 		    S("@1 Slab", S("@1 Glass",  S(color_desc))),
-		    default.node_sound_stone_defaults(),
+		    default.node_sound_glass_defaults(),
 		    false,
 		    S("Inner @1", S("@1 Stair", S("@1 Glass", S(color_desc)))),
 		    S("Outer @1", S("@1 Stair", S("@1 Glass", S(color_desc))))

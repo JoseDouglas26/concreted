@@ -1,106 +1,80 @@
 -- concreted/definitions.lua
 
 if minetest.get_modpath("angledstairs") then
-    concreted.have_angledstairs = true
     if minetest.settings:get_bool("enable_angledstairs") then
         concreted.enable_angledstairs = true
     else
         concreted.enable_angledstairs = false
     end
-else
-    concreted.have_angledstairs = false
 end
 
 if minetest.get_modpath("angledwalls") then
-    concreted.have_angledwalls = true
     if minetest.settings:get_bool("enable_angledwalls") then
         concreted.enable_angledwalls = true
     else
         concreted.enable_angledwalls = false
     end
-else
-    concreted.have_angledwalls = false
 end
 
 if minetest.get_modpath("bucket_wooden") then
-    concreted.have_bucket_wooden = true
     if minetest.settings:get_bool("enable_bucket_wooden") then
         concreted.enable_bucket_wooden = true
     else
         concreted.enable_bucket_wooden = false
     end
-else
-    concreted.have_bucket_wooden = false
 end
 
 if minetest.get_modpath("i3") then
-    concreted.have_i3 = true
     if minetest.settings:get_bool("enable_compression") then
         concreted.enable_compression = true
     else
         concreted.enable_compression = false
     end
-else
-    concreted.have_i3 = false
 end
 
 if minetest.get_modpath("moreblocks") then
-    concreted.have_moreblocks = true
     if minetest.settings:get_bool("enable_moreblocks") then
         concreted.enable_moreblocks = true
     else
         concreted.enable_moreblocks = false
     end
-else
-    concreted.have_moreblocks = false
 end
 
 if minetest.get_modpath("pillars") then
-    concreted.have_pillars = true
     if minetest.settings:get_bool("enable_pillars") then
         concreted.enable_pillars = true
     else
         concreted.enable_pillars = false
     end
-else
-    concreted.have_pillars = false
 end
 
 if minetest.get_modpath("pkarcs") then
-    concreted.have_pkarcs = true
     if minetest.settings:get_bool("enable_pkarcs") then
         concreted.enable_pkarcs = true
     else
         concreted.enable_pkarcs = false
     end
-else
-    concreted.have_pkarcs = false
 end
 
 if minetest.get_modpath("stainedglass") then
-    concreted.have_stainedglass = true
     if minetest.settings:get_bool("enable_extensions") then
         concreted.enable_extensions = true
     else
         concreted.enable_extensions = false
     end
-else
-    concreted.have_stainedglass = false
 end
 
 if minetest.get_modpath("stoneworks") then
-    concreted.have_stoneworks = true
     if minetest.settings:get_bool("enable_stoneworks") then
         concreted.enable_stoneworks = true
     else
         concreted.enable_stoneworks = false
     end
-else
-    concreted.have_stoneworks = false
 end
 
 concreted.enable_meseposts = minetest.settings:get_bool("enable_meseposts")
 concreted.enable_stairs    = minetest.settings:get_bool("enable_stairs")
+concreted.enable_renaming  = minetest.settings:get_bool("enable_renaming")
 concreted.enable_walls     = minetest.settings:get_bool("enable_walls")
 
 concreted.colors = dye.dyes
@@ -125,7 +99,7 @@ if concreted.enable_angledwalls then
     }
 end
 
-if concreted.have_stainedglass then
+if concreted.enable_extensions then
     concreted.glass_list = {}
 end
 

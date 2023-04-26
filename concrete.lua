@@ -29,14 +29,6 @@ function concreted.register_mesepost(color_name, color_desc)
 			texture = "concreted_" .. color_name .. ".png"
 		}
 	)
-
-	minetest.override_item(
-		"concreted:mese_post_light_" .. color_name .. "_concrete",
-		{
-			groups = {cracky = 3, oddly_breakable_by_hand = 2},
-			sounds = default.node_sound_stone_defaults()
-		}
-	)
 end
 
 function concreted.register_node(color_name, color_desc)
