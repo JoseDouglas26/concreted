@@ -2,14 +2,16 @@
 
 local S = minetest.get_translator("concreted")
 
-for i = 1, #concreted.colors do
-    minetest.override_item(
-        "concreted:mese_post_light_" .. concreted.colors[i][1] .. "_concrete",
-        {
-            groups = {cracky = 3, oddly_breakable_by_hand = 2},
-            sounds = default.node_sound_stone_defaults()
-        }
-    )
+if concreted.enable_meseposts then
+    for i = 1, #concreted.colors do
+        minetest.override_item(
+            "concreted:mese_post_light_" .. concreted.colors[i][1] .. "_concrete",
+            {
+                groups = {cracky = 3, oddly_breakable_by_hand = 2},
+                sounds = default.node_sound_stone_defaults()
+            }
+        )
+    end
 end
 
 if concreted.enable_renaming then

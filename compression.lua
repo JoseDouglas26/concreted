@@ -1,20 +1,8 @@
 -- concreted/compression.lua
 
-local concrete_nodes = {
-    "concreted:",
-    "stairs:slab_",
-    "stairs:stair_",
-    "stairs:stair_inner_",
-    "stairs:stair_outer_",
-    "concreted:wall_"
-}
+local concrete_nodes = {"concreted:"}
 
-local glass_nodes = {
-    "stairs:slab_",
-    "stairs:stair_",
-    "stairs:stair_inner_",
-    "stairs:stair_outer_"
-}
+local glass_nodes = {}
 
 if concreted.enable_angledstairs then
     for i = 1, #concreted.angledstairs_subset do
@@ -43,6 +31,17 @@ end
 
 if concreted.enable_pkarcs then
     table.insert(concrete_nodes, "pkarcs:")
+end
+
+if concreted.enable_stairs then
+    for i = 1, #concreted.stairs_subset do
+        table.insert(concrete_nodes, concreted.stairs_subset[i])
+        table.insert(glass_nodes, concreted.stairs_subset[i])
+    end
+end
+
+if concreted.enable_walls then
+    table.insert(concrete_nodes, "concreted:wall_")
 end
 
 for i = 1, #concrete_nodes do
@@ -79,11 +78,13 @@ for i = 1, #concrete_nodes do
     end
 end
 
-for i = 1, #glass_nodes do
-    i3.compress(glass_nodes[i] .. "black_glass", {
-        replace = "black_glass",
-        by = concreted.glass_list
-    })
+if concreted.enable_extensions then
+    for i = 1, #glass_nodes do
+        i3.compress(glass_nodes[i] .. "black_glass", {
+            replace = "black_glass",
+            by = concreted.glass_list
+        })
+    end
 end
 
 table.insert(concreted.concrete_list, "black_concrete")

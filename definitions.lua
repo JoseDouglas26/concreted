@@ -1,5 +1,16 @@
 -- concreted/definitions.lua
 
+function concreted.bypass(color_name, color_desc)
+    return {color_name, color_desc}
+end
+
+concreted.angledstairs = concreted.bypass
+concreted.angledwalls = concreted.bypass
+concreted.moreblocks = concreted.bypass
+concreted.pillars = concreted.bypass
+concreted.pkarcs = concreted.bypass
+concreted.stoneworks = concreted.bypass
+
 if minetest.get_modpath("angledstairs") then
     if minetest.settings:get_bool("enable_angledstairs") then
         concreted.enable_angledstairs = true
@@ -81,6 +92,8 @@ concreted.colors = dye.dyes
 concreted.concrete_list = {}
 
 if concreted.enable_angledstairs then
+    concreted.angledstairs = concreted.register_angledstairs
+
     concreted.angledstairs_subset = {
         "angledstairs:angled_slab_left_",
         "angledstairs:angled_slab_right_",
@@ -90,6 +103,8 @@ if concreted.enable_angledstairs then
 end
 
 if concreted.enable_angledwalls then
+    concreted.angledwalls = concreted.register_angledwalls
+
     concreted.angledwalls_subset = {
         "angledglass:glass_",
         "angledwalls:angled_wall_",
@@ -103,7 +118,15 @@ if concreted.enable_extensions then
     concreted.glass_list = {}
 end
 
+if concreted.enable_meseposts then
+    concreted.meseposts = concreted.register_mesepost
+else
+    concreted.meseposts = concreted.bypass
+end
+
 if concreted.enable_moreblocks then
+    concreted.moreblocks = concreted.register_moreblocks
+
     concreted.stairsplus_subset = {
         { "micro", "" },
         { "micro", "_1" },
@@ -153,7 +176,30 @@ if concreted.enable_moreblocks then
     }
 end
 
+if concreted.enable_pillars then
+    concreted.pillars = concreted.register_pillars
+end
+
+if concreted.enable_pkarcs then
+    concreted.pkarcs = concreted.register_pkarcs
+end
+
+if concreted.enable_stairs then
+    concreted.stairs = concreted.register_stair_and_slab
+
+    concreted.stairs_subset = {
+        "stairs:slab_",
+        "stairs:stair_",
+        "stairs:stair_inner_",
+        "stairs:stair_outer_",
+    }
+else
+    concreted.stairs = concreted.bypass
+end
+
 if concreted.enable_stoneworks then
+    concreted.stoneworks = concreted.register_stoneworks
+
     concreted.stoneworks_subset = {
         "arches_high",
         "arches_low",
@@ -177,6 +223,12 @@ if concreted.enable_stoneworks then
         "thin_wall_low_quad",
         "thin_wall_low_T"]]--
     }
+end
+
+if concreted.enable_walls then
+    concreted.walls = concreted.register_walls
+else
+    concreted.walls = concreted.bypass
 end
 
 concreted.water_containers = {
